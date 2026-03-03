@@ -7,6 +7,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import { logger } from './utils/logger';
+import { errorHandler } from './middleware/errorHandler';
+import authRoutes from './routes/auth.routes';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -44,6 +46,17 @@ app.get('/api/health', (_req, res) => {
         timestamp: new Date().toISOString(),
     });
 });
+
+// Routes
+app.use('/api/auth', authRoutes);
+
+// 404 catch-all (must be after all routes)
+app.use((_req, res) => {
+    res.status(404).json({ error: 'Route non trouvée' });
+});
+
+// Global error handler (must be last)
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
