@@ -1,0 +1,53 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import rateLimit from 'express-rate-limit';
+import { logger } from './utils/logger';
+
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+// Security headers
+app.use(helmet());
+
+// CORS — allow all origins for now
+app.use(cors());
+
+// Request logging
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
+
+// Body parsing
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Rate limiting — 100 requests per 15 minutes per IP
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again later.' },
+});
+app.use(limiter);
+
+// Health check
+app.get('/api/health', (_req, res) => {
+    res.json({
+        status: 'ok',
+        app: 'Khedma API',
+        timestamp: new Date().toISOString(),
+    });
+});
+
+// Start server
+app.listen(PORT, () => {
+    logger.info(`Khedma API running on port ${PORT}`);
+});
+
+export default app;
