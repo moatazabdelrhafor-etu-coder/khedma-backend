@@ -106,3 +106,16 @@ export const listTasksSchema = Joi.object({
     page: Joi.number().integer().min(1).default(1).optional(),
     limit: Joi.number().integer().min(1).max(50).default(20).optional(),
 });
+
+export const completeTaskSchema = Joi.object({
+    final_amount: Joi.number().integer().min(0).optional().allow(null).messages({
+        'number.min': 'Le montant final doit être positif',
+    }),
+    payment_method: Joi.string()
+        .valid('cash', 'digital', 'transfer')
+        .optional()
+        .allow(null)
+        .messages({
+            'any.only': 'Le moyen de paiement doit être cash, digital ou transfer',
+        }),
+});

@@ -14,6 +14,8 @@ import bidRoutes from './routes/bid.routes';
 import userRoutes from './routes/user.routes';
 import reviewRoutes from './routes/review.routes';
 import uploadRoutes from './routes/upload.routes';
+import notificationRoutes from './routes/notification.routes';
+import transactionRoutes from './routes/transaction.routes';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -59,6 +61,8 @@ app.use('/api/bids', bidRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 // 404 catch-all (must be after all routes)
 app.use((_req, res) => {

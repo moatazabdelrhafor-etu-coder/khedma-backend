@@ -5,10 +5,12 @@ import {
     getOpenTasks,
     getTaskById,
     cancelTask,
+    startTask,
+    completeTask,
 } from '../controllers/task.controller';
 import { validate } from '../middleware/validate';
 import { authenticate } from '../middleware/auth';
-import { createTaskSchema } from '../validators/task.validator';
+import { createTaskSchema, completeTaskSchema } from '../validators/task.validator';
 
 const router = Router();
 
@@ -26,5 +28,11 @@ router.get('/:id', authenticate, getTaskById);
 
 // PATCH /api/tasks/:id/cancel — cancel a task
 router.patch('/:id/cancel', authenticate, cancelTask);
+
+// PATCH /api/tasks/:id/start — tasker starts working on task
+router.patch('/:id/start', authenticate, startTask);
+
+// PATCH /api/tasks/:id/complete — confirm task completion
+router.patch('/:id/complete', authenticate, validate(completeTaskSchema), completeTask);
 
 export default router;
