@@ -9,6 +9,7 @@ import rateLimit from 'express-rate-limit';
 import { logger } from './utils/logger';
 import { errorHandler } from './middleware/errorHandler';
 import authRoutes from './routes/auth.routes';
+import taskRoutes from './routes/task.routes';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -49,6 +50,7 @@ app.get('/api/health', (_req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/tasks', taskRoutes);
 
 // 404 catch-all (must be after all routes)
 app.use((_req, res) => {
