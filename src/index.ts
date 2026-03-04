@@ -11,6 +11,7 @@ import { errorHandler } from './middleware/errorHandler';
 import authRoutes from './routes/auth.routes';
 import taskRoutes from './routes/task.routes';
 import bidRoutes from './routes/bid.routes';
+import userRoutes from './routes/user.routes';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -53,6 +54,7 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/bids', bidRoutes);
+app.use('/api/users', userRoutes);
 
 // 404 catch-all (must be after all routes)
 app.use((_req, res) => {
